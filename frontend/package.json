@@ -1,0 +1,28 @@
+{
+  "name": "ecommerce-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "node tests/unit/context.test.js && node tests/unit/components.test.js && node tests/integration/userFlow.test.js",
+    "test:unit": "node tests/unit/context.test.js && node tests/unit/components.test.js",
+    "test:integration": "node tests/integration/userFlow.test.js",
+    "test:context": "node tests/unit/context.test.js",
+    "test:components": "node tests/unit/components.test.js"
+  },
+  "dependencies": {
+    "lucide-react": "^0.344.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.1.8"
+  }
+}

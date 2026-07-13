@@ -1,0 +1,426 @@
+# Environment Configuration
+.env
+.env.local
+.env.*.local
+.env.production
+.env.test
+
+# Node.js Dependencies
+node_modules/
+npm-debug.log*
+npm-error.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+.pnpm-lock.yaml
+
+# IDE Configuration
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+*.c9/
+.netrc
+.eslintcache
+.prettier-ignore
+
+# Build Output
+dist/
+build/
+out/
+coverage/
+.next/
+.nuxt/
+.cache/
+.eslint-cache/
+.nyc_output/
+
+# Test Artifacts
+test-results/
+test-report.json
+test-report.html
+*.lcov
+.coverage/
+.tap/
+junit.xml
+test-report-*.json
+
+# Development Artifacts
+.temp/
+.tmp/
+tmp/
+temp/
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+lerna-debug.log
+
+# OS-Specific Files
+Thumbs.db
+.Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Editor Backups
+*.bak
+*.backup
+*.swp
+*.swo
+*~
+.vimrc
+.editorconfig
+
+# Dependency Lock Files (for libraries)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+*.mdb
+
+# Compiled Files
+*.class
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.gz
+*.tar
+*.tgz
+
+# Sensitive Data
+credentials.json
+secrets.json
+config.production.json
+private.key
+*.pem
+*.key
+
+# Shell & Batch Scripts
+*.sh
+!deploy.sh
+*.bat
+!build.bat
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# CI/CD
+.travis.yml
+.circleci/
+Jenkinsfile
+
+# Markdown & Documentation Backups
+*.md.bak
+*.md.backup
+
+# Certificates & Keys
+*.cert
+*.crt
+*.key
+*.p12
+*.pfx
+
+# Temporary Test Databases
+test.db
+test.sqlite
+test-data.sql
+
+# Runtime Caches
+.cache/
+.eslint-cache/
+.jest-cache/
+.node-gyp/
+
+# Package Manager Caches
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Local Development Overrides
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE Specific Directories
+.vscode/extensions.json
+.vscode/settings.json
+.vscode/launch.json
+.idea/workspace.xml
+.idea/tasks.xml
+
+# OS Temporary Files
+$RECYCLE.BIN/
+.Trash/
+.TemporaryItems/
+
+# Parcel, Webpack, Bundler
+.parcel-cache
+.parcel-cache/
+dist/parcel/
+
+# Misc
+.tern-port
+.env.uat
+rollup.config.js.bak
+
+# GitHub Actions
+.github/workflows/secrets/
+.github/workflows/.env
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.json.bak
+
+# Performance Profiling
+perf/
+benchmarks/
+*.prof
+
+# Memory Dumps
+*.hprof
+*.heapSnapshot
+
+# Logs Directory
+logs/
+*.log
+lerna-debug.log*
+
+# Runtime Data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary User Files
+.cache/
+.session/
+
+# Build-specific
+out/
+build/
+*.so
+*.dylib
+*.dll
+dist/
+.next/
+.nuxt/
+.cache/
+
+# Testing Framework Artifacts
+.mocha_output/
+.nyc_output/
+coverage/
+jest_output/
+xunit.xml
+
+# Database Migrations
+migrations/*.js.bak
+
+# Virtual Environments
+venv/
+env/
+.venv
+.env/
+
+# Yarn Specific
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+
+# PNPM
+.pnpm-lock.yaml
+
+# Bun
+bunfig.toml
+bun.lockb
+
+# Nuxt Generated
+dist/
+.nuxt/
+.output/
+
+# Next.js
+.next/
+out/
+
+# Gatsby
+public/
+.cache/
+
+# Production Build Files
+production/
+release/
+public/
+static/
+
+# Turbo
+.turbo/
+
+# Generated Files
+generated/
+_generated/
+
+# Local Configuration Overrides
+.local/
+local/
+
+# Application Specific Ignores
+# E-Commerce Platform Specific
+admin_exports/
+user_uploads/
+product_images/backup/
+checkout_logs/
+order_archives/
+
+# Frontend Build
+frontend/dist/
+frontend/.next/
+frontend/out/
+
+# Backend Runtime
+backend/uploads/
+backend/logs/
+backend/exports/
+
+# Cache Directories
+frontend/.eslint-cache/
+backend/.eslint-cache/
+
+# Session & Token Artifacts
+.session/
+tokens.json
+refresh_tokens.json
+
+# Temporary Migration Files
+migrations/*.bak
+migrations/*.backup
+
+# Debug Symbols
+*.map
+*.map.gz
+
+# Platform Specific
+.env.windows
+.env.macos
+.env.linux
+
+# Confidential Files
+*.secret
+*.private
+certificate.*
+.keys/
+credentials/
+
+# Backup Database Snapshots
+*.sql.bak
+*.sql.backup
+db_backups/
+database_exports/
+
+# Generated Documentation
+docs/generated/
+api-docs/
+coverage-report.html
+
+# Temporary Compilation Files
+*.ts.bak
+*.tsx.bak
+*.jsx.bak
+
+# Build Cache
+.eslint-cache/
+.prettier-cache/
+.cache/
+
+# Node Module Backups
+node_modules.bak/
+
+# Testing Coverage
+lcov.info
+coverage.json
+*.lcov
+
+# Platform Cache Files
+Thumbs.db
+.DS_Store
+.AppleDouble
+
+# Dependency Resolution Lock Files (if committing lock files is disabled)
+# package-lock.json
+# yarn.lock
+
+# Runtime Configuration
+runtime.config.json
+config.runtime.json
+
+# Socket & Port Files
+.sock
+*.sock
+
+# Module Federation
+container/
+remote/
+
+# Webpack
+.webpack/
+dist/webpack/
+
+# Vite
+dist/
+.vite/
+
+# Rollup
+dist/rollup/
+
+# ESBuild
+dist/esbuild/
+
+# SWC
+dist/swc/
+
+# Babel
+dist/babel/
+
+# Additional Ignores
+.fusebox/
+dist/
+.cache/
+.eslintcache/
+node_modules/
+coverage/
+.env
+.env.local
+npm-debug.log
+yarn-error.log
