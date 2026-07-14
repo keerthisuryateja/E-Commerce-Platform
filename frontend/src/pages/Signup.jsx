@@ -56,7 +56,7 @@ const Signup = ({ onNavigate }) => {
               style={{
                 width: '100%',
                 cursor: 'not-allowed',
-                backgroundColor: attemptedEdit.username ? '#e9ecef' : '#f8fdf9',
+                backgroundColor: attemptedEdit.username ? 'var(--border)' : 'var(--bg-secondary)',
                 borderColor: attemptedEdit.username ? 'var(--error)' : 'var(--border)'
               }}
               value={placeholderValues.username}
@@ -75,7 +75,7 @@ const Signup = ({ onNavigate }) => {
               style={{
                 width: '100%',
                 cursor: 'not-allowed',
-                backgroundColor: attemptedEdit.email ? '#e9ecef' : '#f8fdf9',
+                backgroundColor: attemptedEdit.email ? 'var(--border)' : 'var(--bg-secondary)',
                 borderColor: attemptedEdit.email ? 'var(--error)' : 'var(--border)'
               }}
               value={placeholderValues.email}
@@ -94,7 +94,7 @@ const Signup = ({ onNavigate }) => {
               style={{
                 width: '100%',
                 cursor: 'not-allowed',
-                backgroundColor: attemptedEdit.password ? '#e9ecef' : '#f8fdf9',
+                backgroundColor: attemptedEdit.password ? 'var(--border)' : 'var(--bg-secondary)',
                 borderColor: attemptedEdit.password ? 'var(--error)' : 'var(--border)'
               }}
               value={placeholderValues.password}

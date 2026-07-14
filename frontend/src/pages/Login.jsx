@@ -134,7 +134,7 @@ const Login = ({ onNavigate }) => {
                 style={{
                   width: '100%',
                   cursor: 'not-allowed',
-                  backgroundColor: attemptedEditEmail ? '#e9ecef' : '#f8fdf9',
+                  backgroundColor: attemptedEditEmail ? 'var(--border)' : 'var(--bg-secondary)',
                   borderColor: attemptedEditEmail ? 'var(--error)' : 'var(--border)'
                 }}
                 value={credentials[profile].email}
@@ -164,7 +164,7 @@ const Login = ({ onNavigate }) => {
                 style={{
                   width: '100%',
                   cursor: 'not-allowed',
-                  backgroundColor: attemptedEditPassword ? '#e9ecef' : '#f8fdf9',
+                  backgroundColor: attemptedEditPassword ? 'var(--border)' : 'var(--bg-secondary)',
                   borderColor: attemptedEditPassword ? 'var(--error)' : 'var(--border)'
                 }}
                 value={credentials[profile].password}
