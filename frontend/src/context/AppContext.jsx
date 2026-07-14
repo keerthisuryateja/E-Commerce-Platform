@@ -48,8 +48,17 @@ export const AppProvider = ({ children }) => {
   const [productsLoaded, setProductsLoaded] = useState(false);
 
   // BASE URLs
-  const API_URL = 'http://localhost:5000/api';
-  const WS_URL = 'ws://localhost:5000';
+  // Prefer explicit Vite env vars (VITE_API_URL / VITE_WS_URL) when provided.
+  // Otherwise default to same-origin REST API under `/api` and a matching WebSocket URL.
+  const API_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL
+    : (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:5000/api');
+
+  const WS_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_WS_URL)
+    ? import.meta.env.VITE_WS_URL
+    : (typeof window !== 'undefined'
+      ? `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}`
+      : 'ws://localhost:5000');
 
   // Deduplication guard — suppresses the same message+type if fired within 300 ms.
   // This covers StrictMode double-invocations and any remaining edge cases.
