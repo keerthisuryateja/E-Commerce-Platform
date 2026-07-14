@@ -492,7 +492,7 @@ const OrdersTab = ({ adminOrders, loadingOrders, onRefresh, onExportCSV, onStatu
 
 // ─── Main AdminPanel ───────────────────────────────────────────
 const AdminPanel = () => {
-  const { products, orders, updateProductStock, updateProductPrice, addProduct, deleteProduct, cancelOrder, updateOrderStatus, showToast, API_URL, token } = useContext(AppContext);
+  const { products, orders, updateProductStock, updateProductPrice, addProduct, deleteProduct, cancelOrder, updateOrderStatus, showToast, API_URL, token, useSimulator } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState('analytics');
   const [stockInputs, setStockInputs] = useState({});
   const [priceInputs, setPriceInputs] = useState({});
@@ -517,6 +517,12 @@ const AdminPanel = () => {
 
   const fetchAllOrders = async () => {
     setLoadingOrders(true);
+    if (useSimulator) {
+      const localOrders = localStorage.getItem('sim_orders');
+      setAdminOrders(localOrders ? JSON.parse(localOrders) : []);
+      setLoadingOrders(false);
+      return;
+    }
     try {
       const res = await fetch(`${API_URL}/orders`, { headers: { 'Authorization': `Bearer ${token}` } });
       if (res.ok) setAdminOrders(await res.json());

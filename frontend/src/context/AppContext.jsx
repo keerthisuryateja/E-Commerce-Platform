@@ -905,7 +905,8 @@ export const AppProvider = ({ children }) => {
       toggleDarkMode,
       recentlyViewed,
       addToRecentlyViewed,
-      productsLoaded
+      productsLoaded,
+      useSimulator
     }}>
       {children}
     </AppContext.Provider>

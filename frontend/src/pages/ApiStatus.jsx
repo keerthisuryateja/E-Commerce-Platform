@@ -10,7 +10,7 @@ const ENDPOINT_CONFIG = {
 };
 
 const ApiStatus = () => {
-  const { API_URL, wsConnected } = useContext(AppContext);
+  const { API_URL, wsConnected, useSimulator } = useContext(AppContext);
   const [diagnosticRunning, setDiagnosticRunning] = useState(false);
   const [dbInfo, setDbInfo] = useState({ status: 'Unknown', type: 'Unknown' });
   const [generalStats, setGeneralStats] = useState({ latency: '-', timestamp: '-' });
@@ -45,6 +45,37 @@ const ApiStatus = () => {
         ])
       )
     );
+
+    if (useSimulator) {
+      logToTerminal('Calling server health status dashboard...');
+      await new Promise(r => setTimeout(r, 200));
+      setDbInfo({ status: 'OK', type: 'Frontend LocalStorage Simulator' });
+      setGeneralStats({
+        latency: '0ms (Simulated)',
+        timestamp: new Date().toISOString()
+      });
+      logToTerminal('Database Node reported: OK (Driver: Frontend LocalStorage Simulator)');
+      logToTerminal('Central Server API responding. Latency: 0ms (Simulated)');
+
+      for (const [key, cfg] of Object.entries(ENDPOINT_CONFIG)) {
+        logToTerminal(`Pinging ${cfg.name}...`);
+        await new Promise(r => setTimeout(r, 200));
+        setEndpoints(prev => ({
+          ...prev,
+          [key]: {
+            ...prev[key],
+            status: 'Active',
+            code: 200,
+            latency: '0ms'
+          }
+        }));
+        logToTerminal(`[SUCCESS] ${cfg.name} returned 200 OK. Responded in 0ms (Simulated Ready)`);
+      }
+
+      logToTerminal('[SYS] Health check diagnostic reports finalized.');
+      setDiagnosticRunning(false);
+      return;
+    }
 
     // 1. Check Global Server & Database
     try {
@@ -111,7 +142,7 @@ const ApiStatus = () => {
 
     logToTerminal('[SYS] Health check diagnostic reports finalized.');
     setDiagnosticRunning(false);
-  }, [API_URL, logToTerminal]);
+  }, [API_URL, logToTerminal, useSimulator]);
 
   // Run automatically on mount once
   useEffect(() => {
