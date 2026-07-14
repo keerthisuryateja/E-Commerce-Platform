@@ -50,15 +50,20 @@ export const AppProvider = ({ children }) => {
   // BASE URLs
   // Prefer explicit Vite env vars (VITE_API_URL / VITE_WS_URL) when provided.
   // Otherwise default to same-origin REST API under `/api` and a matching WebSocket URL.
+  // In local development (localhost/127.0.0.1 on a port other than 5000), target port 5000 directly.
+  const isLocalDev = typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+    window.location.port !== '5000';
+
   const API_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
     ? import.meta.env.VITE_API_URL
-    : (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:5000/api');
+    : (isLocalDev ? 'http://localhost:5000/api' : (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:5000/api'));
 
   const WS_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_WS_URL)
     ? import.meta.env.VITE_WS_URL
-    : (typeof window !== 'undefined'
+    : (isLocalDev ? 'ws://localhost:5000' : (typeof window !== 'undefined'
       ? `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}`
-      : 'ws://localhost:5000');
+      : 'ws://localhost:5000'));
 
   // Deduplication guard — suppresses the same message+type if fired within 300 ms.
   // This covers StrictMode double-invocations and any remaining edge cases.

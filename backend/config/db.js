@@ -54,7 +54,7 @@ class InMemoryDatabase {
     }
 
     // Products: Get single (handles SELECT * or SELECT stock or SELECT 1 FROM products WHERE id = ?)
-    if (cleanSql.includes('FROM products WHERE id = ?') || cleanSql.includes('FROM products WHERE id=?')) {
+    if (cleanSql.startsWith('SELECT') && (cleanSql.includes('FROM products WHERE id = ?') || cleanSql.includes('FROM products WHERE id=?'))) {
       const id = parseInt(params[0]);
       const product = this.products.find(p => p.id === id);
       return [product ? [product] : [], null];

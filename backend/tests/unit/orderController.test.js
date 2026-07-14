@@ -1,5 +1,3 @@
-const orderController = require('../../controllers/orderController');
-
 // Mock database
 const mockData = {
   products: [
@@ -46,6 +44,8 @@ const mockDb = {
       let orders = mockData.orders;
       if (sql.includes('WHERE user_id = ?')) {
         orders = orders.filter(o => o.user_id === params[0]);
+      } else if (sql.includes('WHERE id = ?') || sql.includes('WHERE id=?')) {
+        orders = orders.filter(o => o.id === params[0]);
       }
       return [orders];
     }
@@ -91,6 +91,13 @@ const mockDb = {
     return [[]];
   }
 };
+
+// Inject mock database into require cache
+require.cache[require.resolve('../../config/db')] = {
+  exports: mockDb
+};
+
+const orderController = require('../../controllers/orderController');
 
 // Test suite
 const tests = {
