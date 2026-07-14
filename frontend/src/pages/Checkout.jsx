@@ -2,11 +2,19 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext.jsx';
 import { ShoppingCart, CreditCard, ChevronRight, AlertTriangle, Home, Trash2, Tag, X } from 'lucide-react';
 
+const AVAILABLE_COUPONS = [
+  { code: 'SPROUT20', description: '20% off your entire order' },
+  { code: 'GREEN10', description: '10% off your entire order' },
+  { code: 'FLAT50', description: '$50 flat discount' },
+  { code: 'FREESHIP', description: 'Free shipping discount' }
+];
+
 const Checkout = ({ onNavigate }) => {
   const { cart, addresses, updateCartQuantity, removeFromCart, processCheckout, showToast, appliedCoupon, validateCoupon, removeCoupon, getImageUrl } = useContext(AppContext);
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [paying, setPaying] = useState(false);
   const [couponCode, setCouponCode] = useState('');
+  const [showCouponList, setShowCouponList] = useState(false);
 
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 50 || subtotal === 0 ? 0 : 5.99;
@@ -276,29 +284,91 @@ const Checkout = ({ onNavigate }) => {
                     </button>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <input
-                      type="text"
-                      placeholder="Enter coupon code"
-                      className="form-input"
-                      style={{ flex: 1, fontSize: '0.85rem', padding: '8px 12px' }}
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          if (couponCode.trim()) validateCoupon(couponCode);
-                        }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      style={{ padding: '8px 14px', fontSize: '0.85rem', whiteSpace: 'nowrap' }}
-                      onClick={() => { if (couponCode.trim()) validateCoupon(couponCode); }}
-                    >
-                      Apply
-                    </button>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="text"
+                        placeholder="Enter coupon code"
+                        className="form-input"
+                        style={{ flex: 1, fontSize: '0.85rem', padding: '8px 12px' }}
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (couponCode.trim()) validateCoupon(couponCode);
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        style={{ padding: '8px 14px', fontSize: '0.85rem', whiteSpace: 'nowrap' }}
+                        onClick={() => { if (couponCode.trim()) validateCoupon(couponCode); }}
+                      >
+                        Apply
+                      </button>
+                    </div>
+
+                    <div style={{ textAlign: 'right' }}>
+                      <button
+                        type="button"
+                        onClick={() => setShowCouponList(prev => !prev)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--primary)',
+                          fontWeight: 600,
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                          padding: '0'
+                        }}
+                      >
+                        {showCouponList ? 'Hide Available Coupons' : 'See Available Coupons'}
+                      </button>
+                    </div>
+
+                    {showCouponList && (
+                      <div style={{
+                        marginTop: '6px',
+                        padding: '12px',
+                        backgroundColor: 'var(--bg-secondary)',
+                        borderRadius: 'var(--radius)',
+                        border: '1px dashed var(--border)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        maxHeight: '180px',
+                        overflowY: 'auto'
+                      }}>
+                        <p style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-secondary)', margin: 0 }}>Click a coupon to apply it:</p>
+                        {AVAILABLE_COUPONS.map(c => (
+                          <div 
+                            key={c.code}
+                            onClick={() => {
+                              setCouponCode(c.code);
+                              validateCoupon(c.code);
+                            }}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              padding: '6px 10px',
+                              borderRadius: '6px',
+                              backgroundColor: 'var(--bg-primary)',
+                              border: '1px solid var(--border)',
+                              cursor: 'pointer',
+                              fontSize: '0.8rem',
+                              transition: 'var(--transition)'
+                            }}
+                          >
+                            <span style={{ fontWeight: 800, color: 'var(--primary)' }}>{c.code}</span>
+                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{c.description}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
