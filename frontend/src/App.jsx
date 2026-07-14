@@ -38,13 +38,22 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState(getInitialPage);
 
   const navigateTo = (page) => {
+    // Read latest user from localStorage if context state is still updating (stale closure)
+    let currentUser = user;
+    if (!currentUser) {
+      try {
+        const saved = localStorage.getItem('user');
+        if (saved) currentUser = JSON.parse(saved);
+      } catch {}
+    }
+
     // Guards
-    if (PROTECTED_PAGES.includes(page) && !user) {
+    if (PROTECTED_PAGES.includes(page) && !currentUser) {
       setCurrentPage('login');
       sessionStorage.setItem('currentPage', 'login');
       return;
     }
-    if (ADMIN_ONLY_PAGES.includes(page) && user?.role !== 'admin') {
+    if (ADMIN_ONLY_PAGES.includes(page) && currentUser?.role !== 'admin') {
       setCurrentPage('store');
       sessionStorage.setItem('currentPage', 'store');
       return;
