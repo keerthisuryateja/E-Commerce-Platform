@@ -424,3 +424,6 @@ coverage/
 .env.local
 npm-debug.log
 yarn-error.log
+
+# Ensure frontend public assets are tracked
+!frontend/public/
