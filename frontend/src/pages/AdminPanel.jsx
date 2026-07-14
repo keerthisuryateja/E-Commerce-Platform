@@ -157,7 +157,7 @@ const AnalyticsTab = ({ orders, products }) => {
 };
 
 // ─── Inventory Tab ─────────────────────────────────────────────
-const InventoryTab = ({ products, stockInputs, priceInputs, onStockChange, onPriceChange, onStockUpdate, onPriceUpdate, onAddProduct, onDeleteProduct }) => {
+const InventoryTab = ({ products, stockInputs, priceInputs, onStockChange, onPriceChange, onStockUpdate, onPriceUpdate, onAddProduct, onDeleteProduct, getImageUrl }) => {
   const [editingPrice, setEditingPrice] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -695,6 +695,7 @@ const AdminPanel = () => {
             onPriceUpdate={handlePriceUpdate}
             onAddProduct={addProduct}
             onDeleteProduct={handleDeleteProduct}
+            getImageUrl={getImageUrl}
           />
         </div>
       )}
