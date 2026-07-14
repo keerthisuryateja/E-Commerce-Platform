@@ -64,10 +64,10 @@ ON DUPLICATE KEY UPDATE `email` = `email`;
 
 -- Pre-seed Products
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`, `image_url`) VALUES
-(1, 'Fiddle Leaf Fig', 'Premium indoor air purifying tree with glossy green leaves.', 45.00, 15, '/assets/fiddle.jpg'),
-(2, 'Monstera Deliciosa', 'Stunning Swiss cheese plant featuring split heart-shaped leaves.', 32.50, 8, '/assets/Monstera Delociosa.jpg'),
-(3, 'Snake Plant', 'Extremely resilient succulent ideal for low light and beginners.', 19.99, 25, '/assets/Snake Plant.jpg'),
-(4, 'Golden Pothos', 'Lush trailing vine with beautiful heart-shaped green and yellow leaves.', 14.50, 12, '/assets/Golden Pothos.jpeg'),
-(5, 'Echeveria Succulent', 'Beautiful rose-shaped succulent with soft dusty green leaves.', 8.99, 40, '/assets/Echeveria Succulent.jpg'),
-(6, 'Boston Fern', 'Feathery light green fronds that thrive in humid environments.', 22.00, 10, '/assets/Boston Fern.jpg')
+(1, 'Fiddle Leaf Fig', 'Premium indoor air purifying tree with glossy green leaves.', 45.00, 15, 'assets/fiddle.jpg'),
+(2, 'Monstera Deliciosa', 'Stunning Swiss cheese plant featuring split heart-shaped leaves.', 32.50, 8, 'assets/Monstera Delociosa.jpg'),
+(3, 'Snake Plant', 'Extremely resilient succulent ideal for low light and beginners.', 19.99, 25, 'assets/Snake Plant.jpg'),
+(4, 'Golden Pothos', 'Lush trailing vine with beautiful heart-shaped green and yellow leaves.', 14.50, 12, 'assets/Golden Pothos.jpeg'),
+(5, 'Echeveria Succulent', 'Beautiful rose-shaped succulent with soft dusty green leaves.', 8.99, 40, 'assets/Echeveria Succulent.jpg'),
+(6, 'Boston Fern', 'Feathery light green fronds that thrive in humid environments.', 22.00, 10, 'assets/Boston Fern.jpg')
 ON DUPLICATE KEY UPDATE `name` = `name`;

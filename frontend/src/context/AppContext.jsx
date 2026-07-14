@@ -12,12 +12,12 @@ const DEFAULT_ADDRESSES = [
 ];
 
 const DEFAULT_PRODUCTS = [
-  { id: 1, name: 'Fiddle Leaf Fig', description: 'Premium indoor air purifying tree with glossy green leaves.', price: 45.00, stock: 15, image_url: '/assets/fiddle.jpg' },
-  { id: 2, name: 'Monstera Deliciosa', description: 'Stunning Swiss cheese plant featuring split heart-shaped leaves.', price: 32.50, stock: 8, image_url: '/assets/Monstera Delociosa.jpg' },
-  { id: 3, name: 'Snake Plant', description: 'Extremely resilient succulent ideal for low light and beginners.', price: 19.99, stock: 25, image_url: '/assets/Snake Plant.jpg' },
-  { id: 4, name: 'Golden Pothos', description: 'Lush trailing vine with beautiful heart-shaped green and yellow leaves.', price: 14.50, stock: 12, image_url: '/assets/Golden Pothos.jpeg' },
-  { id: 5, name: 'Echeveria Succulent', description: 'Beautiful rose-shaped succulent with soft dusty green leaves.', price: 8.99, stock: 40, image_url: '/assets/Echeveria Succulent.jpg' },
-  { id: 6, name: 'Boston Fern', description: 'Feathery light green fronds that thrive in humid environments.', price: 22.00, stock: 10, image_url: '/assets/Boston Fern.jpg' }
+  { id: 1, name: 'Fiddle Leaf Fig', description: 'Premium indoor air purifying tree with glossy green leaves.', price: 45.00, stock: 15, image_url: 'assets/fiddle.jpg' },
+  { id: 2, name: 'Monstera Deliciosa', description: 'Stunning Swiss cheese plant featuring split heart-shaped leaves.', price: 32.50, stock: 8, image_url: 'assets/Monstera Delociosa.jpg' },
+  { id: 3, name: 'Snake Plant', description: 'Extremely resilient succulent ideal for low light and beginners.', price: 19.99, stock: 25, image_url: 'assets/Snake Plant.jpg' },
+  { id: 4, name: 'Golden Pothos', description: 'Lush trailing vine with beautiful heart-shaped green and yellow leaves.', price: 14.50, stock: 12, image_url: 'assets/Golden Pothos.jpeg' },
+  { id: 5, name: 'Echeveria Succulent', description: 'Beautiful rose-shaped succulent with soft dusty green leaves.', price: 8.99, stock: 40, image_url: 'assets/Echeveria Succulent.jpg' },
+  { id: 6, name: 'Boston Fern', description: 'Feathery light green fronds that thrive in humid environments.', price: 22.00, stock: 10, image_url: 'assets/Boston Fern.jpg' }
 ];
 
 const DEFAULT_ORDERS = [
@@ -28,8 +28,8 @@ const DEFAULT_ORDERS = [
     total_amount: 52.49,
     created_at: new Date().toISOString(),
     items: [
-      { id: 1, order_id: 1, product_id: 2, quantity: 1, price: 32.50, name: 'Monstera Deliciosa', image_url: '/assets/Monstera Delociosa.jpg' },
-      { id: 2, order_id: 1, product_id: 3, quantity: 1, price: 19.99, name: 'Snake Plant', image_url: '/assets/Snake Plant.jpg' }
+      { id: 1, order_id: 1, product_id: 2, quantity: 1, price: 32.50, name: 'Monstera Deliciosa', image_url: 'assets/Monstera Delociosa.jpg' },
+      { id: 2, order_id: 1, product_id: 3, quantity: 1, price: 19.99, name: 'Snake Plant', image_url: 'assets/Snake Plant.jpg' }
     ]
   }
 ];
