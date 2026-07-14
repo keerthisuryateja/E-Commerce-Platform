@@ -236,16 +236,22 @@ try {
   // But wrap it in a lazy initialization check, or test the connection
   pool = mysql.createPool(dbConfig);
   
-  // Test connection immediately
+  // Test connection immediately, but ensure any queries wait until the
+  // connection test completes (successful MySQL pool or fallback to in-memory).
+  let poolReadyResolve;
+  const poolReady = new Promise(resolve => { poolReadyResolve = resolve; });
+
   pool.getConnection()
     .then(conn => {
       console.log('✅ Connected to MySQL database successfully!');
       conn.release();
+      poolReadyResolve();
     })
     .catch(err => {
       console.error('❌ Failed to connect to MySQL database:', err.message);
       isInMemory = true;
       pool = new InMemoryDatabase();
+      poolReadyResolve();
     });
 
 } catch (err) {
@@ -255,6 +261,14 @@ try {
 }
 
 module.exports = {
-  query: (sql, params) => pool.query(sql, params),
+  // Ensure callers wait for the initial DB readiness check to complete
+  // to avoid a race where early queries run against an unverified MySQL pool
+  // and throw before the in-memory fallback is installed.
+  query: async (sql, params) => {
+    if (typeof poolReadyResolve === 'function') {
+      await poolReady;
+    }
+    return pool.query(sql, params);
+  },
   isInMemory: () => isInMemory
 };
