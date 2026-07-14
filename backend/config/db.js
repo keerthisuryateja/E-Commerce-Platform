@@ -220,6 +220,10 @@ class InMemoryDatabase {
 let pool;
 let isInMemory = false;
 
+// Ensure the readiness promise is visible to the exported query wrapper
+let poolReadyResolve;
+const poolReady = new Promise(resolve => { poolReadyResolve = resolve; });
+
 // Create database connection pool
 try {
   const dbConfig = {
@@ -236,11 +240,6 @@ try {
   // But wrap it in a lazy initialization check, or test the connection
   pool = mysql.createPool(dbConfig);
   
-  // Test connection immediately, but ensure any queries wait until the
-  // connection test completes (successful MySQL pool or fallback to in-memory).
-  let poolReadyResolve;
-  const poolReady = new Promise(resolve => { poolReadyResolve = resolve; });
-
   pool.getConnection()
     .then(conn => {
       console.log('✅ Connected to MySQL database successfully!');
