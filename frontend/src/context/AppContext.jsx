@@ -50,10 +50,11 @@ export const AppProvider = ({ children }) => {
   // BASE URLs
   // Prefer explicit Vite env vars (VITE_API_URL / VITE_WS_URL) when provided.
   // Otherwise default to same-origin REST API under `/api` and a matching WebSocket URL.
-  // In local development (localhost/127.0.0.1 on a port other than 5000), target port 5000 directly.
-  const isLocalDev = typeof window !== 'undefined' &&
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
-    window.location.port !== '5000';
+  // In local development or static hosting (like GitHub Pages on github.io), target local port 5000 directly.
+  const isLocalDev = typeof window !== 'undefined' && (
+    ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '5000') ||
+    window.location.hostname.endsWith('github.io')
+  );
 
   const API_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
     ? import.meta.env.VITE_API_URL
