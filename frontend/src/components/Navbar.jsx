@@ -9,7 +9,7 @@ const Navbar = ({ currentPage, onNavigate }) => {
 
   return (
     <nav style={{
-      backgroundColor: darkMode ? 'rgba(15, 26, 17, 0.92)' : 'rgba(255, 255, 255, 0.85)',
+      backgroundColor: darkMode ? 'rgba(13, 14, 16, 0.92)' : 'rgba(255, 255, 255, 0.85)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       borderBottom: '1px solid var(--border)',
