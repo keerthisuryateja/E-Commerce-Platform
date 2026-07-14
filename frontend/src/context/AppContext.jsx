@@ -2,6 +2,42 @@ import React, { createContext, useState, useEffect, useCallback, useRef } from '
 
 export const AppContext = createContext();
 
+const DEFAULT_USERS = [
+  { id: 1, email: 'admin@ecommerce.com', password: 'admin123', role: 'admin' },
+  { id: 2, email: 'user@ecommerce.com', password: 'user123', role: 'user' }
+];
+
+const DEFAULT_ADDRESSES = [
+  { id: 1, user_id: 2, street: '123 Leafy Lane', city: 'Greenwood', state: 'Forest', zip: '98765' }
+];
+
+const DEFAULT_PRODUCTS = [
+  { id: 1, name: 'Fiddle Leaf Fig', description: 'Premium indoor air purifying tree with glossy green leaves.', price: 45.00, stock: 15, image_url: '/assets/fiddle.jpg' },
+  { id: 2, name: 'Monstera Deliciosa', description: 'Stunning Swiss cheese plant featuring split heart-shaped leaves.', price: 32.50, stock: 8, image_url: '/assets/Monstera Delociosa.jpg' },
+  { id: 3, name: 'Snake Plant', description: 'Extremely resilient succulent ideal for low light and beginners.', price: 19.99, stock: 25, image_url: '/assets/Snake Plant.jpg' },
+  { id: 4, name: 'Golden Pothos', description: 'Lush trailing vine with beautiful heart-shaped green and yellow leaves.', price: 14.50, stock: 12, image_url: '/assets/Golden Pothos.jpeg' },
+  { id: 5, name: 'Echeveria Succulent', description: 'Beautiful rose-shaped succulent with soft dusty green leaves.', price: 8.99, stock: 40, image_url: '/assets/Echeveria Succulent.jpg' },
+  { id: 6, name: 'Boston Fern', description: 'Feathery light green fronds that thrive in humid environments.', price: 22.00, stock: 10, image_url: '/assets/Boston Fern.jpg' }
+];
+
+const DEFAULT_ORDERS = [
+  {
+    id: 1,
+    user_id: 2,
+    status: 'Pending',
+    total_amount: 52.49,
+    created_at: new Date().toISOString(),
+    items: [
+      { id: 1, order_id: 1, product_id: 2, quantity: 1, price: 32.50, name: 'Monstera Deliciosa', image_url: '/assets/Monstera Delociosa.jpg' },
+      { id: 2, order_id: 1, product_id: 3, quantity: 1, price: 19.99, name: 'Snake Plant', image_url: '/assets/Snake Plant.jpg' }
+    ]
+  }
+];
+
+const useSimulator = typeof window !== 'undefined' &&
+  window.location.hostname.endsWith('github.io') &&
+  !(typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL);
+
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('user');
@@ -25,7 +61,7 @@ export const AppProvider = ({ children }) => {
   const [addresses, setAddresses] = useState([]);
   const [orders, setOrders] = useState([]);
   const [toasts, setToasts] = useState([]);
-  const [dbType, setDbType] = useState('MySQL');
+  const [dbType, setDbType] = useState(useSimulator ? 'In-Memory (Frontend)' : 'MySQL');
   const [wsConnected, setWsConnected] = useState(false);
   const [wishlist, setWishlist] = useState(() => {
     const saved = localStorage.getItem('wishlist');
@@ -105,6 +141,16 @@ export const AppProvider = ({ children }) => {
 
   // Fetch products catalog
   const fetchProducts = useCallback(async () => {
+    if (useSimulator) {
+      let localProducts = localStorage.getItem('sim_products');
+      if (!localProducts) {
+        localProducts = JSON.stringify(DEFAULT_PRODUCTS);
+        localStorage.setItem('sim_products', localProducts);
+      }
+      setProducts(JSON.parse(localProducts));
+      setProductsLoaded(true);
+      return;
+    }
     try {
       const res = await fetch(`${API_URL}/products`);
       if (res.ok) {
@@ -121,6 +167,16 @@ export const AppProvider = ({ children }) => {
   // Fetch shipping addresses
   const fetchAddresses = useCallback(async () => {
     if (!token) return;
+    if (useSimulator) {
+      let localAddresses = localStorage.getItem('sim_addresses');
+      if (!localAddresses) {
+        localAddresses = JSON.stringify(DEFAULT_ADDRESSES);
+        localStorage.setItem('sim_addresses', localAddresses);
+      }
+      const allAddresses = JSON.parse(localAddresses);
+      setAddresses(allAddresses.filter(a => a.user_id === user?.id));
+      return;
+    }
     try {
       const res = await fetch(`${API_URL}/users/addresses`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -132,11 +188,25 @@ export const AppProvider = ({ children }) => {
     } catch (err) {
       console.error('Error fetching addresses:', err);
     }
-  }, [token]);
+  }, [token, user]);
 
   // Fetch orders
   const fetchOrders = useCallback(async () => {
     if (!token) return;
+    if (useSimulator) {
+      let localOrders = localStorage.getItem('sim_orders');
+      if (!localOrders) {
+        localOrders = JSON.stringify(DEFAULT_ORDERS);
+        localStorage.setItem('sim_orders', localOrders);
+      }
+      const allOrders = JSON.parse(localOrders);
+      if (user?.role === 'admin') {
+        setOrders(allOrders);
+      } else {
+        setOrders(allOrders.filter(o => o.user_id === user?.id));
+      }
+      return;
+    }
     try {
       const res = await fetch(`${API_URL}/orders`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -148,7 +218,7 @@ export const AppProvider = ({ children }) => {
     } catch (err) {
       console.error('Error fetching orders:', err);
     }
-  }, [token]);
+  }, [token, user]);
 
   // Trigger loading data on startup / login change
   useEffect(() => {
@@ -168,6 +238,10 @@ export const AppProvider = ({ children }) => {
 
   // Real-Time Inventory & State Sync via WebSockets
   useEffect(() => {
+    if (useSimulator) {
+      setWsConnected(true);
+      return;
+    }
     let ws;
     let reconnectTimeout;
 
@@ -259,6 +333,20 @@ export const AppProvider = ({ children }) => {
 
   // Auth Operations
   const login = async (email, password) => {
+    if (useSimulator) {
+      const matched = DEFAULT_USERS.find(u => u.email === email && u.password === password);
+      if (!matched) {
+        showToast('Invalid email or password', 'error');
+        return false;
+      }
+      const mockToken = 'mock-jwt-token-for-' + matched.role;
+      localStorage.setItem('token', mockToken);
+      localStorage.setItem('user', JSON.stringify(matched));
+      setToken(mockToken);
+      setUser(matched);
+      showToast('Logged in successfully (Simulated Backend)!', 'success');
+      return true;
+    }
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -350,6 +438,23 @@ export const AppProvider = ({ children }) => {
 
   // Shipping Address Operations
   const addAddress = async (addressData) => {
+    if (useSimulator) {
+      let localAddresses = localStorage.getItem('sim_addresses');
+      if (!localAddresses) {
+        localAddresses = JSON.stringify(DEFAULT_ADDRESSES);
+      }
+      const allAddresses = JSON.parse(localAddresses);
+      const newAddress = {
+        id: allAddresses.length + 1,
+        user_id: user?.id || 2,
+        ...addressData
+      };
+      allAddresses.push(newAddress);
+      localStorage.setItem('sim_addresses', JSON.stringify(allAddresses));
+      setAddresses(prev => [...prev, newAddress]);
+      showToast('Shipping Address Saved Successfully (Simulated)!', 'success');
+      return true;
+    }
     try {
       const res = await fetch(`${API_URL}/users/addresses`, {
         method: 'POST',
@@ -379,6 +484,59 @@ export const AppProvider = ({ children }) => {
     }
 
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    if (useSimulator) {
+      // 1. Verify and mutate stock
+      let localProducts = localStorage.getItem('sim_products');
+      if (!localProducts) localProducts = JSON.stringify(DEFAULT_PRODUCTS);
+      const allProducts = JSON.parse(localProducts);
+
+      for (const cartItem of cart) {
+        const prod = allProducts.find(p => p.id === cartItem.id);
+        if (!prod || prod.stock < cartItem.quantity) {
+          showToast(`Insufficient stock for ${cartItem.name}`, 'error');
+          return false;
+        }
+      }
+
+      // Decrement stock
+      for (const cartItem of cart) {
+        const prod = allProducts.find(p => p.id === cartItem.id);
+        prod.stock -= cartItem.quantity;
+      }
+      localStorage.setItem('sim_products', JSON.stringify(allProducts));
+      setProducts(allProducts);
+
+      // 2. Create order
+      let localOrders = localStorage.getItem('sim_orders');
+      if (!localOrders) localOrders = JSON.stringify(DEFAULT_ORDERS);
+      const allOrders = JSON.parse(localOrders);
+
+      const newOrder = {
+        id: allOrders.length + 1,
+        user_id: user?.id || 2,
+        status: 'Pending',
+        total_amount: totalAmount,
+        created_at: new Date().toISOString(),
+        items: cart.map((item, index) => ({
+          id: index + 1,
+          order_id: allOrders.length + 1,
+          product_id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+          name: item.name,
+          image_url: item.image_url
+        }))
+      };
+
+      allOrders.push(newOrder);
+      localStorage.setItem('sim_orders', JSON.stringify(allOrders));
+      
+      setCart([]);
+      showToast('Order Placed Successfully (Simulated)!', 'success');
+      fetchOrders();
+      return true;
+    }
 
     try {
       const res = await fetch(`${API_URL}/orders`, {
@@ -414,6 +572,20 @@ export const AppProvider = ({ children }) => {
 
   // Admin inventory updates
   const updateProductStock = async (productId, newStock) => {
+    if (useSimulator) {
+      let localProducts = localStorage.getItem('sim_products');
+      if (!localProducts) localProducts = JSON.stringify(DEFAULT_PRODUCTS);
+      const allProducts = JSON.parse(localProducts);
+
+      const prod = allProducts.find(p => p.id === productId);
+      if (prod) {
+        prod.stock = parseInt(newStock);
+      }
+      localStorage.setItem('sim_products', JSON.stringify(allProducts));
+      setProducts(allProducts);
+      showToast(`Stock updated to ${newStock} successfully (Simulated)`, 'success');
+      return true;
+    }
     try {
       const res = await fetch(`${API_URL}/products/${productId}/stock`, {
         method: 'PATCH',
@@ -439,6 +611,20 @@ export const AppProvider = ({ children }) => {
 
   // Admin price update
   const updateProductPrice = async (productId, newPrice) => {
+    if (useSimulator) {
+      let localProducts = localStorage.getItem('sim_products');
+      if (!localProducts) localProducts = JSON.stringify(DEFAULT_PRODUCTS);
+      const allProducts = JSON.parse(localProducts);
+
+      const prod = allProducts.find(p => p.id === productId);
+      if (prod) {
+        prod.price = parseFloat(newPrice);
+      }
+      localStorage.setItem('sim_products', JSON.stringify(allProducts));
+      setProducts(allProducts);
+      showToast(`Price updated to $${parseFloat(newPrice).toFixed(2)} (Simulated)`, 'success');
+      return true;
+    }
     try {
       const res = await fetch(`${API_URL}/products/${productId}/price`, {
         method: 'PATCH',
@@ -464,6 +650,43 @@ export const AppProvider = ({ children }) => {
 
   // Admin / User cancel order
   const cancelOrder = async (orderId) => {
+    if (useSimulator) {
+      let localOrders = localStorage.getItem('sim_orders');
+      if (!localOrders) localOrders = JSON.stringify(DEFAULT_ORDERS);
+      const allOrders = JSON.parse(localOrders);
+
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) {
+        showToast('Order not found', 'error');
+        return false;
+      }
+
+      if (order.status === 'Cancelled') {
+        showToast('Order is already cancelled', 'error');
+        return false;
+      }
+
+      order.status = 'Cancelled';
+      localStorage.setItem('sim_orders', JSON.stringify(allOrders));
+
+      // Restock products
+      let localProducts = localStorage.getItem('sim_products');
+      if (!localProducts) localProducts = JSON.stringify(DEFAULT_PRODUCTS);
+      const allProducts = JSON.parse(localProducts);
+
+      for (const item of order.items) {
+        const prod = allProducts.find(p => p.id === item.product_id);
+        if (prod) {
+          prod.stock += item.quantity;
+        }
+      }
+      localStorage.setItem('sim_products', JSON.stringify(allProducts));
+      setProducts(allProducts);
+
+      showToast('Order Cancelled & Restocked (Simulated)', 'success');
+      fetchOrders();
+      return true;
+    }
     try {
       const res = await fetch(`${API_URL}/orders/${orderId}/cancel`, {
         method: 'POST',
@@ -486,6 +709,20 @@ export const AppProvider = ({ children }) => {
 
   // Admin update order status
   const updateOrderStatus = async (orderId, newStatus) => {
+    if (useSimulator) {
+      let localOrders = localStorage.getItem('sim_orders');
+      if (!localOrders) localOrders = JSON.stringify(DEFAULT_ORDERS);
+      const allOrders = JSON.parse(localOrders);
+
+      const order = allOrders.find(o => o.id === orderId);
+      if (order) {
+        order.status = newStatus;
+      }
+      localStorage.setItem('sim_orders', JSON.stringify(allOrders));
+      showToast(`Order status updated to "${newStatus}" (Simulated)`, 'success');
+      fetchOrders();
+      return true;
+    }
     try {
       const res = await fetch(`${API_URL}/orders/${orderId}/status`, {
         method: 'PATCH',
@@ -560,6 +797,25 @@ export const AppProvider = ({ children }) => {
 
   // Admin: Add new product
   const addProduct = async (productData) => {
+    if (useSimulator) {
+      let localProducts = localStorage.getItem('sim_products');
+      if (!localProducts) localProducts = JSON.stringify(DEFAULT_PRODUCTS);
+      const allProducts = JSON.parse(localProducts);
+
+      const newProduct = {
+        id: Math.max(0, ...allProducts.map(p => p.id)) + 1,
+        ...productData,
+        price: parseFloat(productData.price),
+        stock: parseInt(productData.stock),
+        image_url: productData.image_url || '/assets/fiddle.jpg'
+      };
+
+      allProducts.push(newProduct);
+      localStorage.setItem('sim_products', JSON.stringify(allProducts));
+      setProducts(allProducts);
+      showToast(`"${newProduct.name}" added to catalog (Simulated)!`, 'success');
+      return newProduct;
+    }
     try {
       const res = await fetch(`${API_URL}/products`, {
         method: 'POST',
@@ -583,6 +839,18 @@ export const AppProvider = ({ children }) => {
 
   // Admin: Delete product
   const deleteProduct = async (productId, productName) => {
+    if (useSimulator) {
+      let localProducts = localStorage.getItem('sim_products');
+      if (!localProducts) localProducts = JSON.stringify(DEFAULT_PRODUCTS);
+      const allProducts = JSON.parse(localProducts);
+
+      const nextProducts = allProducts.filter(p => p.id !== productId);
+      localStorage.setItem('sim_products', JSON.stringify(nextProducts));
+      setProducts(nextProducts);
+      setCart(prev => prev.filter(item => item.id !== productId));
+      showToast(`"${productName}" removed from catalog (Simulated)`, 'success');
+      return true;
+    }
     try {
       const res = await fetch(`${API_URL}/products/${productId}`, {
         method: 'DELETE',
