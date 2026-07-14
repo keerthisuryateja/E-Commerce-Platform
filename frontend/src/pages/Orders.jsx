@@ -105,7 +105,7 @@ const OrderTimeline = ({ currentStatus }) => {
 
 // ─── Orders Page ───────────────────────────────────────────────
 const Orders = ({ onNavigate }) => {
-  const { orders, cancelOrder } = useContext(AppContext);
+  const { orders, cancelOrder, getImageUrl } = useContext(AppContext);
   const [cancellingId, setCancellingId] = useState(null);
   const [confirm, setConfirm]           = useState({ open: false, orderId: null });
 
@@ -287,7 +287,7 @@ const Orders = ({ onNavigate }) => {
                     justifyContent: 'space-between', gap: '16px'
                   }}>
                     <img
-                      src={item.image_url}
+                      src={getImageUrl(item.image_url)}
                       alt={item.name}
                       onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=100'; }}
                       style={{

@@ -270,7 +270,7 @@ const InventoryTab = ({ products, stockInputs, priceInputs, onStockChange, onPri
             {/* Product Image + Name */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: '1 1 180px' }}>
               {product.image_url ? (
-                <img src={product.image_url} alt={product.name} style={{ width: '52px', height: '52px', borderRadius: '8px', objectFit: 'cover', backgroundColor: 'var(--bg-tertiary)' }} />
+                <img src={getImageUrl(product.image_url)} alt={product.name} style={{ width: '52px', height: '52px', borderRadius: '8px', objectFit: 'cover', backgroundColor: 'var(--bg-tertiary)' }} />
               ) : (
                 <div style={{ width: '52px', height: '52px', borderRadius: '8px', backgroundColor: 'var(--bg-tertiary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <ImageOff size={20} color="var(--text-secondary)" />
@@ -492,7 +492,7 @@ const OrdersTab = ({ adminOrders, loadingOrders, onRefresh, onExportCSV, onStatu
 
 // ─── Main AdminPanel ───────────────────────────────────────────
 const AdminPanel = () => {
-  const { products, orders, updateProductStock, updateProductPrice, addProduct, deleteProduct, cancelOrder, updateOrderStatus, showToast, API_URL, token, useSimulator } = useContext(AppContext);
+  const { products, orders, updateProductStock, updateProductPrice, addProduct, deleteProduct, cancelOrder, updateOrderStatus, showToast, API_URL, token, useSimulator, getImageUrl } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState('analytics');
   const [stockInputs, setStockInputs] = useState({});
   const [priceInputs, setPriceInputs] = useState({});

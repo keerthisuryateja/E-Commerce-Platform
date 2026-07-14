@@ -5,7 +5,7 @@ import ProductModal from '../components/ProductModal.jsx';
 import SkeletonCard from '../components/SkeletonCard.jsx';
 
 const Dashboard = ({ onNavigate, currentPage }) => {
-  const { products, addToCart, addresses, addAddress, user, toggleWishlist, isInWishlist, recentlyViewed, addToRecentlyViewed, productsLoaded } = useContext(AppContext);
+  const { products, addToCart, addresses, addAddress, user, toggleWishlist, isInWishlist, recentlyViewed, addToRecentlyViewed, productsLoaded, getImageUrl } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
   
   // Shipping Address Form State
@@ -234,7 +234,7 @@ const Dashboard = ({ onNavigate, currentPage }) => {
                       }}
                     >
                       <img 
-                        src={product.image_url || 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=500'} 
+                        src={getImageUrl(product.image_url)} 
                         alt={product.name} 
                         style={{
                           width: '100%',
@@ -382,7 +382,7 @@ const Dashboard = ({ onNavigate, currentPage }) => {
                     }}
                   >
                     <img
-                      src={product.image_url || 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=200'}
+                      src={getImageUrl(product.image_url)}
                       alt={product.name}
                       onError={e => { e.currentTarget.src = 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=200'; }}
                       style={{ width: '100%', height: '110px', objectFit: 'cover' }}

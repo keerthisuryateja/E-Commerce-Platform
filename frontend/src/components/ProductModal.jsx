@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContext.jsx';
 import { X, ShoppingCart, Heart, Package } from 'lucide-react';
 
 const ProductModal = ({ product, onClose }) => {
-  const { addToCart, toggleWishlist, isInWishlist, user } = useContext(AppContext);
+  const { addToCart, toggleWishlist, isInWishlist, user, getImageUrl } = useContext(AppContext);
 
   if (!product) return null;
 
@@ -45,7 +45,7 @@ const ProductModal = ({ product, onClose }) => {
         {/* Left — Image */}
         <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--bg-tertiary)', minHeight: '380px' }}>
           <img
-            src={product.image_url || 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=600'}
+            src={getImageUrl(product.image_url)}
             alt={product.name}
             onError={e => { e.currentTarget.src = 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=600'; }}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}

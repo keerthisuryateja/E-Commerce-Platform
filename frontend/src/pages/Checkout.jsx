@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContext.jsx';
 import { ShoppingCart, CreditCard, ChevronRight, AlertTriangle, Home, Trash2, Tag, X } from 'lucide-react';
 
 const Checkout = ({ onNavigate }) => {
-  const { cart, addresses, updateCartQuantity, removeFromCart, processCheckout, showToast, appliedCoupon, validateCoupon, removeCoupon } = useContext(AppContext);
+  const { cart, addresses, updateCartQuantity, removeFromCart, processCheckout, showToast, appliedCoupon, validateCoupon, removeCoupon, getImageUrl } = useContext(AppContext);
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [paying, setPaying] = useState(false);
   const [couponCode, setCouponCode] = useState('');
@@ -98,7 +98,7 @@ const Checkout = ({ onNavigate }) => {
                     }}
                   >
                     <img 
-                      src={item.image_url} 
+                      src={getImageUrl(item.image_url)} 
                       alt={item.name} 
                       style={{
                         width: '60px',

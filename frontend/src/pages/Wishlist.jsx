@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContext.jsx';
 import { Heart, ShoppingCart, Trash2, Leaf, Clock } from 'lucide-react';
 
 const Wishlist = ({ onNavigate }) => {
-  const { products, wishlist, toggleWishlist, addToCart } = useContext(AppContext);
+  const { products, wishlist, toggleWishlist, addToCart, getImageUrl } = useContext(AppContext);
 
   // Get full product data for wishlist items
   const wishlistProducts = wishlist.map(item => {
@@ -80,7 +80,7 @@ const Wishlist = ({ onNavigate }) => {
               {/* Product Image */}
               <div style={{ position: 'relative' }}>
                 <img
-                  src={product.image_url}
+                  src={getImageUrl(product.image_url)}
                   alt={product.name}
                   style={{
                     width: '100%',

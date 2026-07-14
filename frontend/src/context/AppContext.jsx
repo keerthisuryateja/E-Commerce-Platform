@@ -139,6 +139,16 @@ export const AppProvider = ({ children }) => {
     });
   }, []);
 
+  const getImageUrl = useCallback((url) => {
+    if (!url) return 'https://images.unsplash.com/photo-1545241047-6083a3684587?w=500';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
+    const base = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) || '/';
+    return base + cleanUrl;
+  }, []);
+
   // Fetch products catalog
   const fetchProducts = useCallback(async () => {
     if (useSimulator) {
@@ -906,7 +916,8 @@ export const AppProvider = ({ children }) => {
       recentlyViewed,
       addToRecentlyViewed,
       productsLoaded,
-      useSimulator
+      useSimulator,
+      getImageUrl
     }}>
       {children}
     </AppContext.Provider>
